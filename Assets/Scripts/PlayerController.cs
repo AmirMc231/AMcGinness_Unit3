@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
             animplayer.SetInteger("DeathType_int", 2);
             expSystem.Play();
             dirtParticles.Stop();
-            asPlayer.PlayOneShot(crashSound, 5.0f);
+            asPlayer.PlayOneShot(crashSound, 1.0f);
         }
         
     }
