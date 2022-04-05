@@ -11,7 +11,14 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
 
     private Animator animplayer;
-    
+    public ParticleSystem expSystem;
+    public ParticleSystem dirtParticles;
+
+    public AudioClip jumpSound;
+    public AudioClip crashSound;
+
+    private AudioSource asPlayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +27,8 @@ public class PlayerController : MonoBehaviour
         //Physics.gravity = Physics.gravity * gravityModifier;
 
         animplayer = GetComponent<Animator>();
+
+        asPlayer = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -32,6 +41,8 @@ public class PlayerController : MonoBehaviour
             rbPlayer.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
             onGround = false;
             animplayer.SetTrigger("Jump_trig");
+            dirtParticles.Stop();
+            asPlayer.PlayOneShot(jumpSound, 1.0f);
         }
 
     }
@@ -41,6 +52,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             onGround = true;
+            dirtParticles.Play();
         }
         //Game's over with this condition achieved
         else if (collision.gameObject.CompareTag("Obstacle"))
@@ -50,7 +62,9 @@ public class PlayerController : MonoBehaviour
             gameOver = true;
             animplayer.SetBool("Death_b", true);
             animplayer.SetInteger("DeathType_int", 2);
-
+            expSystem.Play();
+            dirtParticles.Stop();
+            asPlayer.PlayOneShot(crashSound, 5.0f);
         }
         
     }
